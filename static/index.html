@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    #light-fields {
+      display: flex;
+      flex-direction: column;
+      width: 300px;
+      margin: 0 auto;
+    }
+
+    label {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 10px;
+    }
+
+    input[type="range"] {
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <fieldset id="light-fields">
+    <code>/light</code>
+    <br/>
+    <label>
+      Device Index
+      <select id="deviceId">
+        <option value="0">All</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+      </select>
+    </label>
+    
+    <label>
+      Hue
+      <input type="range" id="hue" min="0" max="255" value="0">
+    </label>
+
+    <label>
+      Saturation
+      <input type="range" id="saturation" min="0" max="255" value="100">
+    </label>
+    
+    <label>
+      Angle
+      <input type="range" id="angle" min="0" max="27" value="0">
+    </label>
+  </fieldset>
+  
+  <script type="text/javascript">
+    const postRequest = (url, data) => {
+      console.log(data);
+      fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      });
+    };
+
+    let deviceId = 0;
+    document.querySelector('#light-fields').addEventListener('input', function(e) {
+      const target = e.target.id;
+      switch(target) {
+        case 'deviceId':
+          deviceId = e.target.value;
+          break;
+        case 'hue':
+          postRequest('/light', {
+            hue: parseInt(e.target.value),
+            deviceId
+          });
+          break;
+        case 'saturation':
+          postRequest('/light', {
+            saturation: parseInt(e.target.value),
+            deviceId
+          });
+          break;
+        case 'angle':
+          postRequest('/light', {
+            angle: parseInt(e.target.value),
+            deviceId
+          });
+          break;
+      }
+    });
+  </script>
+
+</body>
+</html>
